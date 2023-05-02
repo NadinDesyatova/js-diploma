@@ -1,7 +1,7 @@
 const mainBlock = document.querySelector('main');
 const navDays = Array.from(document.querySelectorAll('.page-nav__day'));
 
-function weekdayDeterminantor(date, index) {
+function weekdayDeterminator(date, index) {
   let weekday = date.getDay();
   if (weekday = 0) {
     navDays[index].classList.add('page-nav__day_weekend');
@@ -26,7 +26,7 @@ navDays.forEach((navDay, index) => {
   let day = new Date();
   day.setDate(day.getDate() + index); 
   navDay.querySelector('.page-nav__day-number').textContent = day.getDate();
-  let dayWeek = weekdayDeterminantor(day, index);
+  let dayWeek = weekdayDeterminator(day, index);
   navDay.querySelector('.page-nav__day-week').textContent = dayWeek;
 });
 
@@ -63,9 +63,6 @@ xhr.addEventListener('load', () => {
     movieInfo.querySelector('.movie__data-origin').textContent = filmOrigin;
     let filmId = films[i][film_id];
     movie.setAttribute('data-film-id', filmId);
-    let storedMovieInfo = 'storedMovie' + i;
-    let storedMovie = 'film' + filmId + '; ' + 'filmName=' + filmName + '; ' + 'filmDescription=' + filmDescription + '; ' + 'filmDuration=' + filmDuration + '; ' + 'filmOrigin=' + filmOrigin;
-    localStorage.setItem(storedMovieInfo, storedMovie);
 
     let hallsOpen = halls.filter(hall => hall[hall_open] === 1);
     let filmHalls = [];
