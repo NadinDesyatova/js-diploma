@@ -2,7 +2,7 @@ const storedSeanceStart = localStorage.getItem('seanceStart');
 const storedFilmName = localStorage.getItem('filmName');
 const storedSeatsLocation = localStorage.getItem('seatsLocation');
 const storedHallName = localStorage.getItem('hallName');
-const storedConfigHall = localStorage.getItem('newConfigHall');
+const ticketInformation = storedFilmName + storedSeanceStart + storedHallName + storedSeatsLocation;
 
 const filmTitle = document.querySelector('.ticket__title');
 const seatsLocation = document.querySelector('.ticket__chairs');
@@ -16,4 +16,4 @@ filmStart.textContent = storedSeanceStart;
 
 const ticketInfoQr = document.querySelector('ticket__info-qr');
 ticketInfoQr.innerHTML = '<div class="ticket__info-qr"></div>';
-document.querySelector('ticket__info-qr').append(QRCreator(storedConfigHall).result);
+document.querySelector('ticket__info-qr').append(QRCreator(ticketInformation).result);
