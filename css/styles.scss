@@ -118,10 +118,11 @@ body {
   background: rgba(241, 235, 230, 0.95);
   color: $black;
   
-  .movie__info {
+  /* .movie__info {
     display: flex;
   }
-  
+  */
+
   .movie__poster {
     position: relative;
     width: 12.5rem;
@@ -345,7 +346,7 @@ body {
   flex-wrap: nowrap;
   text-align: left;
 
-  .col {
+  .colomn {
     max-width: 25rem;
     
     &:first-of-type {
@@ -477,6 +478,22 @@ body {
 @media screen and (min-width: 479px) {
   .page-nav .page-nav__day {
     padding: 1rem 2rem;
+  }
+}
+
+@media (max-width: 575px) {
+  .movie {
+    .movie__info {
+      display: block;
+    }
+  }
+}
+
+@media (min-width: 576px) {
+  .movie {
+    .movie__info {
+      display: flex;
+    }
   }
 }
 

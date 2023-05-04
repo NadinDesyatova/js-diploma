@@ -98,9 +98,10 @@ body {
   background: rgba(241, 235, 230, 0.95);
   color: #000000;
 }
-.movie .movie__info {
+/*.movie .movie__info {
   display: flex;
 }
+*/
 .movie .movie__poster {
   position: relative;
   width: 12.5rem;
@@ -234,7 +235,8 @@ body {
 .conf-step {
   text-align: center;
   background-color: #171D24;
-  padding: 1.5rem 3rem 1.5rem;
+  /* padding: 1.5rem 3rem 1.5rem;
+  */
 }
 
 .conf-step__wrapper {
@@ -298,14 +300,14 @@ body {
   flex-wrap: nowrap;
   text-align: left;
 }
-.conf-step__legend .col {
+.conf-step__legend .colomn {
   max-width: 25rem;
 }
-.conf-step__legend .col:first-of-type {
+.conf-step__legend .colomn:first-of-type {
   padding-right: 1.5rem;
   margin-left: auto;
 }
-.conf-step__legend .col:last-of-type {
+.conf-step__legend .colomn:last-of-type {
   margin-right: auto;
 }
 .conf-step__legend .conf-step__legend-price + .conf-step__legend-price {
@@ -416,6 +418,27 @@ body {
     padding: 1rem 2rem;
   }
 }
+
+@media (max-width: 575px) {
+  .movie .movie__info {
+    display: block;
+  }
+
+  .conf-step {
+    padding: 1.5rem 1rem 1.5rem;
+  }
+}
+
+@media (min-width: 576px) {
+  .movie .movie__info {
+    display: flex;
+  }
+
+  .conf-step {
+    padding: 1.5rem 3rem 1.5rem;
+  }
+}
+
 @media screen and (min-width: 990px) {
   .page-header, nav, main {
     width: 990px;
