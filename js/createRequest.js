@@ -3,20 +3,20 @@ const navDays = Array.from(document.querySelectorAll('.page-nav__day'));
 
 function weekdayDeterminator(date, index, days) {
   let weekday = date.getDay();
-  if (weekday = 0) {
+  if (weekday === 0) {
     days[index].classList.add('page-nav__day_weekend');
     return 'Вс';
-  } else if (weekday = 1) {
+  } else if (weekday === 1) {
     return 'Пн';
-  } else if (weekday = 2) {
+  } else if (weekday === 2) {
     return 'Вт';
-  } else if (weekday = 3) {
+  } else if (weekday === 3) {
     return 'Ср';
-  } else if (weekday = 4) {
+  } else if (weekday === 4) {
     return 'Чт';
-  } else if (weekday = 5) {
+  } else if (weekday === 5) {
     return 'Пт';
-  } else if (weekday = 6) {
+  } else if (weekday === 6) {
     days[index].classList.add('page-nav__day_weekend');
     return 'Сб';
   } 
