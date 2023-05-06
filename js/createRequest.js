@@ -1,10 +1,10 @@
 const mainBlock = document.querySelector('main');
 const navDays = Array.from(document.querySelectorAll('.page-nav__day'));
 
-function weekdayDeterminator(date, index) {
+function weekdayDeterminator(date, index, days) {
   let weekday = date.getDay();
   if (weekday = 0) {
-    navDays[index].classList.add('page-nav__day_weekend');
+    days[index].classList.add('page-nav__day_weekend');
     return 'Вс';
   } else if (weekday = 1) {
     return 'Пн';
@@ -17,17 +17,20 @@ function weekdayDeterminator(date, index) {
   } else if (weekday = 5) {
     return 'Пт';
   } else if (weekday = 6) {
-    navDays[index].classList.add('page-nav__day_weekend');
+    days[index].classList.add('page-nav__day_weekend');
     return 'Сб';
   } 
 }
 
-navDays.forEach((navDay, index) => {
+navDays.forEach((navDay, index, array) => {
   let day = new Date();
   day.setDate(day.getDate() + index); 
   navDay.querySelector('.page-nav__day-number').textContent = day.getDate();
-  let dayWeek = weekdayDeterminator(day, index);
+  let dayWeek = weekdayDeterminator(day, index, array);
   navDay.querySelector('.page-nav__day-week').textContent = dayWeek;
+  let month = +day.getMonth() + 1;
+  let seanceDate = day.getDate() + '.' + day.getMonth() + '.' + day.getFullYear();
+  navDay.setAttribute('data-seance-date', seanceDate);
 });
 
 const xhr = new XMLHttpRequest();
@@ -103,6 +106,8 @@ xhr.addEventListener('load', () => {
     let allSeances = Array.from(document.querySelectorAll('.movie-seances__time'));
     navDay.addEventListener('click', (e) => {
       e.preventDefault();
+      let storedSeanceDate = navDay.dataset.seanceDate;
+      localStorage.setItem('seanceDate', storedSeanceDate);
       array[activeNumberPage].classList.remove('page-nav__day_chosen');
       navDay.classList.add('page-nav__day_chosen');
       activeNumberPage = index; 

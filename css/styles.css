@@ -300,14 +300,14 @@ body {
   flex-wrap: nowrap;
   text-align: left;
 }
-.conf-step__legend .colomn {
+.conf-step__legend .column {
   max-width: 25rem;
 }
-.conf-step__legend .colomn:first-of-type {
+.conf-step__legend .column:first-of-type {
   padding-right: 1.5rem;
   margin-left: auto;
 }
-.conf-step__legend .colomn:last-of-type {
+.conf-step__legend .column:last-of-type {
   margin-right: auto;
 }
 .conf-step__legend .conf-step__legend-price + .conf-step__legend-price {
