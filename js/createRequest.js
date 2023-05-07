@@ -132,7 +132,7 @@ xhr.addEventListener('load', () => {
         localStorage.setItem('hallId', storedHallId);
         let storedHallName = hallOfSeance.dataset.hallName;
         localStorage.setItem('hallName', storedHallName);
-        location = 'hall.html';    
+        location.assign('hall.html');    
       });
     });
   }); 

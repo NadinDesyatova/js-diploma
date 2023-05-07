@@ -68,7 +68,7 @@ xhr.addEventListener('load', () => {
       localStorage.setItem('seatsLocation', seatsLocation);
       localStorage.setItem('costOfTickets', accum);
       if (index === array.length - 1) {
-        location = 'payment.html';
+        location.assign('payment.html');
       }
     }, 0);
   });

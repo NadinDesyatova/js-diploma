@@ -36,5 +36,5 @@ acceptinButton.addEventListener('click', (e) => {
 
   xhr.send(argumentForSend);
 
-  location = 'ticket.html';
+  location.assign('ticket.html');
  });
