@@ -29,7 +29,7 @@ navDays.forEach((navDay, index, array) => {
   let dayWeek = weekdayDeterminator(day, index, array);
   navDay.querySelector('.page-nav__day-week').textContent = dayWeek;
   let month = +day.getMonth() + 1;
-  let seanceDate = day.getDate() + '.' + day.getMonth() + '.' + day.getFullYear();
+  let seanceDate = day.getDate() + '.' + month + '.' + day.getFullYear();
   navDay.setAttribute('data-seance-date', seanceDate);
 });
 
@@ -97,7 +97,7 @@ xhr.addEventListener('load', () => {
         seanceTime.setAttribute('data-seance-start', seanceTimeStart);
         let seanceId = seance[seance_id];
         seanceTime.setAttribute('data-seance-id', seanceId);
-      }); 
+      });  
     });
   }
 
@@ -111,11 +111,6 @@ xhr.addEventListener('load', () => {
       array[activeNumberPage].classList.remove('page-nav__day_chosen');
       navDay.classList.add('page-nav__day_chosen');
       activeNumberPage = index; 
-      allSeances.forEach(seance => {
-        let initialValue = +seance.dataset.seanceTimestamp;
-        value = initialValue + (86400 * activeNumberPage);
-        seance.setAttribute('data-seance-timestamp', value);
-      });
     });
 
     allSeances.forEach(seance => {
@@ -124,7 +119,8 @@ xhr.addEventListener('load', () => {
 
         let storedSeanceId = seance.dataset.seanceId;
         localStorage.setItem('seanceId', storedSeanceId);
-        let storedTimestamp = seance.dataset.seanceTimestamp;
+        let initialTimestamp = +seance.dataset.seanceTimestamp;
+        let storedTimestamp = initialTimestamp + (86400 * activeNumberPage);
         localStorage.setItem('seanceTimestamp', storedTimestamp);
         let storedSeanceStart = seance.dataset.seanceStart;
         localStorage.setItem('seanceStart', storedSeanceStart);
