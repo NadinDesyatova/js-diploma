@@ -1,11 +1,11 @@
-const storedTimestamp = localStorage.getItem('seanceTimestamp');
-const storedHallId = localStorage.getItem('hallId');
-const storedSeanceId = localStorage.getItem('seanceId');
-const argumentForSend = 'event=get_hallConfig&' + storedTimestamp + '=${value1}&'+ storedHallId + '=${value2}&'+ storedSeanceId + '=${value3}';
+const selectedTimestamp = localStorage.getItem('seanceTimestamp');
+const selectedHallId = localStorage.getItem('hallId');
+const selectedSeanceId = localStorage.getItem('seanceId');
+const argumentForSend = 'event=get_hallConfig&' + selectedTimestamp + '=${value1}&'+ selectedHallId + '=${value2}&'+ selectedSeanceId + '=${value3}';
 
-const storedSeanceStart = localStorage.getItem('seanceStart');
-const storedFilmName = localStorage.getItem('filmName');
-const storedHallName = localStorage.getItem('hallName');
+const selectedSeanceStart = localStorage.getItem('seanceStart');
+const selectedFilmName = localStorage.getItem('filmName');
+const selectedHallName = localStorage.getItem('hallName');
 
 const buyingInfoDescription = document.querySelector('.buying__info-description');
 const filmTitle = document.querySelector('.buying__info-title');
@@ -13,13 +13,11 @@ const filmStart = document.querySelector('.buying__info-start');
 const hallName = document.querySelector('.buying__info-hall');
 const acceptinButton = document.querySelector('.acceptin-button');
 const configHall = document.querySelector('.conf-step__wrapper');
-filmTitle.textContent = storedFilmName;
-filmStart.textContent = 'Начало сеанса: ' + storedSeanceStart;
-hallName.textContent = 'Зал ' + storedHallName;
+filmTitle.textContent = selectedFilmName;
+filmStart.textContent = 'Начало сеанса: ' + selectedSeanceStart;
+hallName.textContent = 'Зал ' + selectedHallName;
 
-const xhr = new XMLHttpRequest();
-
-xhr.addEventListener('load', () => {
+function fillingPageHall() {
   let response = xhr.response;
   configHall.insertAdjacentHTML(response);
   let rows = configHall.querySelectorAll('.conf-step__row');
@@ -72,13 +70,4 @@ xhr.addEventListener('load', () => {
       }
     }, 0);
   });
-});
-    
-
-xhr.open('POST', 'http://f0769682.xsph.ru/', true);
-
-xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-xhr.responseType = 'json';
-
-xhr.send(argumentForSend);
+}

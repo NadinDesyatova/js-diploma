@@ -22,19 +22,3 @@ const storedHallId = localStorage.getItem('hallId');
 const storedSeanceId = localStorage.getItem('seanceId');
 const storedConfigHall = localStorage.getItem('newConfigHall');
 const argumentForSend = 'event=sale_add&' + storedTimestamp + '=${value1}&'+ storedHallId + '=${value2}&'+ storedSeanceId + '=${value3}&'+ storedConfigHall + '=${value4}';
-
-acceptinButton.addEventListener('click', (e) => {
-  e.preventDefault();
-
-  const xhr = new XMLHttpRequest();
-
-  xhr.open('POST', 'http://f0769682.xsph.ru/', true);
-
-  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-  xhr.responseType = 'json';
-
-  xhr.send(argumentForSend);
-
-  location.assign('ticket.html');
- });
