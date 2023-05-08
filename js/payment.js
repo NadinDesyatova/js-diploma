@@ -22,3 +22,13 @@ const storedHallId = localStorage.getItem('hallId');
 const storedSeanceId = localStorage.getItem('seanceId');
 const storedConfigHall = localStorage.getItem('newConfigHall');
 const argumentForSend = 'event=sale_add&' + storedTimestamp + '=${value1}&'+ storedHallId + '=${value2}&'+ storedSeanceId + '=${value3}&'+ storedConfigHall + '=${value4}';
+
+function goToPageTicket() {
+  location.assign('ticket.html');
+}
+
+acceptinButton.addEventListener('click', (e) => {
+  e.preventDefault();
+
+  createRequest(argumentForSend, goToPageTicket);
+ });

@@ -17,6 +17,8 @@ filmTitle.textContent = selectedFilmName;
 filmStart.textContent = 'Начало сеанса: ' + selectedSeanceStart;
 hallName.textContent = 'Зал ' + selectedHallName;
 
+createRequest(argumentForSend, fillingPageHall);
+
 function fillingPageHall() {
   let response = xhr.response;
   configHall.insertAdjacentHTML(response);

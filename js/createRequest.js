@@ -1,13 +1,18 @@
-const xhr = new XMLHttpRequest();
+function createRequest(argument, func) {
+  const xhr = new XMLHttpRequest();
 
-xhr.addEventListener('load', () => {
-  fillingPageIndex();
-});
+  xhr.addEventListener('load', () => {
+    func();
+  });
 
-xhr.open('POST', 'http://f0769682.xsph.ru/', true);
+  xhr.open('POST', 'http://f0769682.xsph.ru/', true);
 
-xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-xhr.responseType = 'json';
+  xhr.responseType = 'json';
 
-xhr.send('event=update');
+  xhr.send(argument);
+}
+
+
+

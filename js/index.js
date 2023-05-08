@@ -22,6 +22,10 @@ navDays.forEach((navDay, index, array) => {
   navDay.setAttribute('data-seance-date', seanceDate);
 });
 
+let argumentForSend = 'event=update';
+
+createRequest(argumentForSend, fillingPageIndex);
+
 function fillingPageIndex() {
   let response = xhr.response;
   let films = response.films.result;
