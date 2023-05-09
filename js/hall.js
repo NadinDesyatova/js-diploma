@@ -26,7 +26,7 @@ function fillingPageHall() {
   for (let indexRow = 0; indexRow > rows.length; indexRow++) {
     rows[indexRow].setAttribute('data-row', indexRow);
     let seatsInRow = rows[indexRow].querySelectorAll('.conf-step__chair').filter(seat => seat.classList.contains('conf-step__chair_disabled') === false);
-    for (let indexSeat = 0; indexSeat > seatsInRow; indexSeat++) {
+    for (let indexSeat = 0; indexSeat > seatsInRow.length; indexSeat++) {
       seatsInRow[indexSeat].setAttribute('data-seat', indexSeat);
     }
   }
@@ -53,7 +53,7 @@ function fillingPageHall() {
     localStorage.setItem('newConfigHall', newConfigHall);
 
     let seatsLocation = '';
-    let selectedSeats = Array.from(configHall.querySelectorAll('.conf-step__chair').filter(seat => seat.classList.contains('conf-step__chair_disabled') === false && seat.classList.contains('conf-step__chair_taken') === false)); 
+    let selectedSeats = Array.from(configHall.querySelectorAll('.conf-step__chair').filter(seat => seat.classList.contains('conf-step__chair_selected'))); 
     selectedSeats.reduce((accum, seat, index, array) => {
       accum += +seat.dataset.seatPrice;
       let rowOfSeat = seat.closest('.conf-step__row');

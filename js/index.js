@@ -71,12 +71,12 @@ function fillingPageIndex() {
     });
 
     filmHalls.forEach((item, index) => {
-      let filmSeances = seances.filter(seance => seance['seance_filmid'] === filmId && seance['seance_hallid'] === item[hallId]);
-      let hallName = item[hallName];
+      let filmSeances = seances.filter(seance => seance['seance_filmid'] === filmId && seance['seance_hallid'] === item['hallId']);
+      let hallName = item['hallName'];
       let hallNumber = hallName.substring(hallName.length - 1);
       movie.querySelectorAll('.movie-seances__hall-title')[index].textContent = 'Зал ' + hallNumber;
       movie.querySelectorAll('.movie-seances__hall')[index].setAttribute('data-hall-name', hallNumber);
-      movie.querySelectorAll('.movie-seances__hall')[index].setAttribute('data-hall-id', item[hallId]);
+      movie.querySelectorAll('.movie-seances__hall')[index].setAttribute('data-hall-id', item['hallId']);
       let seancesList = movie.querySelectorAll('.movie-seances__list')[index];
       filmSeances.forEach((seance, i) => {
         seancesList.insertAdjacentHTML('beforeEnd', '<li class="movie-seances__time-block"><a class="movie-seances__time" href="hall.html"></a></li>');
@@ -97,11 +97,12 @@ function fillingPageIndex() {
     let allSeances = Array.from(document.querySelectorAll('.movie-seances__time'));
     navDay.addEventListener('click', (e) => {
       e.preventDefault();
+
       let storedSeanceDate = navDay.dataset.seanceDate;
       localStorage.setItem('seanceDate', storedSeanceDate);
       array[activeNumberPage].classList.remove('page-nav__day_chosen');
       navDay.classList.add('page-nav__day_chosen');
-      activeNumberPage = index; 
+      activeNumberPage = index;     
     });
 
     allSeances.forEach(seance => {
@@ -125,6 +126,6 @@ function fillingPageIndex() {
         localStorage.setItem('hallName', storedHallName);
         location.assign('hall.html');    
       });
-    });
+    });  
   }); 
 }
