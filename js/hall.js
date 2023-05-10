@@ -3,7 +3,7 @@ const selectedHallId = localStorage.getItem('hallId');
 const selectedSeanceId = localStorage.getItem('seanceId');
 const argumentForSend = 'event=get_hallConfig&' + selectedTimestamp + '=${value1}&'+ selectedHallId + '=${value2}&'+ selectedSeanceId + '=${value3}';
 
-const selectedSeanceStart = localStorage.getItem('seanceStart');
+const selectedSeanceStart = localStorage.getItem('seanceTimeStart');
 const selectedFilmName = localStorage.getItem('filmName');
 const selectedHallName = localStorage.getItem('hallName');
 
@@ -17,21 +17,21 @@ filmTitle.textContent = selectedFilmName;
 filmStart.textContent = 'Начало сеанса: ' + selectedSeanceStart;
 hallName.textContent = 'Зал ' + selectedHallName;
 
-createRequest(argumentForSend, fillingPageHall);
+const xhr = new XMLHttpRequest();
 
 function fillingPageHall() {
   let response = xhr.response;
-  configHall.insertAdjacentHTML(response);
+  configHall.innerHTML = response;
   let rows = configHall.querySelectorAll('.conf-step__row');
-  for (let indexRow = 0; indexRow > rows.length; indexRow++) {
+  for (let indexRow = 0; indexRow < rows.length; indexRow++) {
     rows[indexRow].setAttribute('data-row', indexRow);
-    let seatsInRow = rows[indexRow].querySelectorAll('.conf-step__chair').filter(seat => seat.classList.contains('conf-step__chair_disabled') === false);
-    for (let indexSeat = 0; indexSeat > seatsInRow.length; indexSeat++) {
+    let seatsInRow = Array.from(rows[indexRow].querySelectorAll('.conf-step__chair')).filter(seat => seat.classList.contains('conf-step__chair_disabled') === false);
+    for (let indexSeat = 0; indexSeat < seatsInRow.length; indexSeat++) {
       seatsInRow[indexSeat].setAttribute('data-seat', indexSeat);
     }
   }
 
-  let availableSeats = Array.from(configHall.querySelectorAll('.conf-step__chair').filter(seat => seat.classList.contains('conf-step__chair_disabled') === false && seat.classList.contains('conf-step__chair_taken') === false));
+  let availableSeats = Array.from(configHall.querySelectorAll('.conf-step__chair')).filter(seat => seat.classList.contains('conf-step__chair_disabled') === false && seat.classList.contains('conf-step__chair_taken') === false);
   availableSeats.forEach(seat => {
     seat.addEventListener('click', () => {
       seat.classList.contains('conf-step__chair_vip') ? (
@@ -53,7 +53,7 @@ function fillingPageHall() {
     localStorage.setItem('newConfigHall', newConfigHall);
 
     let seatsLocation = '';
-    let selectedSeats = Array.from(configHall.querySelectorAll('.conf-step__chair').filter(seat => seat.classList.contains('conf-step__chair_selected'))); 
+    let selectedSeats = Array.from(configHall.querySelectorAll('.conf-step__chair')).filter(seat => seat.classList.contains('conf-step__chair_selected')); 
     selectedSeats.reduce((accum, seat, index, array) => {
       accum += +seat.dataset.seatPrice;
       let rowOfSeat = seat.closest('.conf-step__row');
@@ -73,3 +73,5 @@ function fillingPageHall() {
     }, 0);
   });
 }
+
+createRequest(argumentForSend, fillingPageHall);

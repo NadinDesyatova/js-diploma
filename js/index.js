@@ -24,7 +24,7 @@ navDays.forEach((navDay, index, array) => {
 
 let argumentForSend = 'event=update';
 
-createRequest(argumentForSend, fillingPageIndex);
+const xhr = new XMLHttpRequest();
 
 function fillingPageIndex() {
   let response = xhr.response;
@@ -51,14 +51,14 @@ function fillingPageIndex() {
     movieInfo.querySelector('.movie__synopsis').textContent = filmDescription;
     let filmDuration = films[i]['film_duration'];
     movie.setAttribute('data-film-duration', filmDuration);
-    movieInfo.querySelector('.movie__data-duration').textContent = filmDuration;
+    movieInfo.querySelector('.movie__data-duration').textContent = filmDuration + ' минут ';
     let filmOrigin = films[i]['film_origin'];
     movie.setAttribute('data-film-origin', filmOrigin);
     movieInfo.querySelector('.movie__data-origin').textContent = filmOrigin;
     let filmId = films[i]['film_id'];
     movie.setAttribute('data-film-id', filmId);
 
-    let hallsOpen = halls.filter(hall => hall['hall_open'] === 1);
+    let hallsOpen = halls.filter(hall => hall['hall_open'] === '1');
     let filmHalls = [];
     hallsOpen.forEach(hall => {
       let hallId = hall['hall_id'];
@@ -76,25 +76,29 @@ function fillingPageIndex() {
       let hallNumber = hallName.substring(hallName.length - 1);
       movie.querySelectorAll('.movie-seances__hall-title')[index].textContent = 'Зал ' + hallNumber;
       movie.querySelectorAll('.movie-seances__hall')[index].setAttribute('data-hall-name', hallNumber);
-      movie.querySelectorAll('.movie-seances__hall')[index].setAttribute('data-hall-id', item['hallId']);
+      let itemHallId = item['hallId'];
+      movie.querySelectorAll('.movie-seances__hall')[index].setAttribute('data-hall-id', itemHallId);
       let seancesList = movie.querySelectorAll('.movie-seances__list')[index];
       filmSeances.forEach((seance, i) => {
         seancesList.insertAdjacentHTML('beforeEnd', '<li class="movie-seances__time-block"><a class="movie-seances__time" href="hall.html"></a></li>');
         let seanceTime = seancesList.querySelectorAll('.movie-seances__time')[i];
-        let seanceTimestamp = +seance['seance_start'] * 60;
-        seanceTime.setAttribute('data-seance-timestamp', seanceTimestamp);
+        let seanceStart = seance['seance_start'];
+        seanceTime.setAttribute('data-seance-start', seanceStart);
         let seanceTimeStart = seance['seance_time'];
         seanceTime.textContent = seanceTimeStart;
-        seanceTime.setAttribute('data-seance-start', seanceTimeStart);
+        seanceTime.setAttribute('data-seance-time-start', seanceTimeStart);
         let seanceId = seance['seance_id'];
         seanceTime.setAttribute('data-seance-id', seanceId);
       });  
     });
   }
-
+  
+  let activeNumberPage = 0;
+  
   navDays.forEach((navDay, index, array) => {
-    let activeNumberPage = 0;
+    
     let allSeances = Array.from(document.querySelectorAll('.movie-seances__time'));
+
     navDay.addEventListener('click', (e) => {
       e.preventDefault();
 
@@ -111,11 +115,11 @@ function fillingPageIndex() {
 
         let storedSeanceId = seance.dataset.seanceId;
         localStorage.setItem('seanceId', storedSeanceId);
-        let initialTimestamp = +seance.dataset.seanceTimestamp;
-        let storedTimestamp = initialTimestamp + (86400 * activeNumberPage);
+        let initialStart = +seance.dataset.seanceStart;
+        let storedTimestamp = activeNumberPage * 86400 + initialStart * 60;
         localStorage.setItem('seanceTimestamp', storedTimestamp);
-        let storedSeanceStart = seance.dataset.seanceStart;
-        localStorage.setItem('seanceStart', storedSeanceStart);
+        let storedSeanceTimeStart = seance.dataset.seanceTimeStart;
+        localStorage.setItem('seanceTimeStart', storedSeanceTimeStart);
         let filmOfSeance = seance.closest('.movie');
         let storedfilmName = filmOfSeance.dataset.filmName;
         localStorage.setItem('filmName', storedfilmName);
@@ -129,3 +133,5 @@ function fillingPageIndex() {
     });  
   }); 
 }
+
+createRequest(argumentForSend, fillingPageIndex);

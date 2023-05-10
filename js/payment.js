@@ -1,4 +1,4 @@
-const storedSeanceStart = localStorage.getItem('seanceStart');
+const storedSeanceStart = localStorage.getItem('seanceTimeStart');
 const storedFilmName = localStorage.getItem('filmName');
 const storedSeatsLocation = localStorage.getItem('seatsLocation');
 const storedHallName = localStorage.getItem('hallName');
@@ -22,6 +22,8 @@ const storedHallId = localStorage.getItem('hallId');
 const storedSeanceId = localStorage.getItem('seanceId');
 const storedConfigHall = localStorage.getItem('newConfigHall');
 const argumentForSend = 'event=sale_add&' + storedTimestamp + '=${value1}&'+ storedHallId + '=${value2}&'+ storedSeanceId + '=${value3}&'+ storedConfigHall + '=${value4}';
+
+const xhr = new XMLHttpRequest();
 
 function goToPageTicket() {
   location.assign('ticket.html');
