@@ -4,7 +4,7 @@
 
 ## API сервиса:
 
-#### Базовый URL АПИ: *http://f0769682.xsph.ru/*
+#### Базовый URL АПИ: *https://jscp-diplom.tw1.ru/*
 
 #### Ответы API
 
@@ -14,7 +14,7 @@
 
 * При отправке запросов используются следующие параметры:
 
-1. Адрес (URL) - *http://f0769682.xsph.ru/*
+1. Адрес (URL) - *https://jscp-diplom.tw1.ru/*
 2. Метод (Method) - `POST`
 3. HTTP заголовок (HttpRequest). Название заголовка: `Content-Type`. Значение заголовка: `application/x-www-form-urlencoded`.
 

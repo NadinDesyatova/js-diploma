@@ -1,13 +1,15 @@
 function createRequest(argument, func) {
+  const xhr = new XMLHttpRequest();
+
   xhr.addEventListener('load', () => {
-    func();
+    const response = JSON.parse(xhr.responseText);
+    
+    func(response);
   });
 
   xhr.open('POST', 'https://jscp-diplom.tw1.ru/', true);
 
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-  xhr.responseType = 'json';
 
   xhr.send(argument);
 }

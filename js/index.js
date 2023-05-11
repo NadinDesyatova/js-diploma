@@ -14,20 +14,19 @@ function weekdayDeterminator(date, index, days) {
 navDays.forEach((navDay, index, array) => {
   let day = new Date();
   day.setDate(day.getDate() + index); 
-  navDay.querySelector('.page-nav__day-number').textContent = day.getDate();
+  let seanceDayNumber = day.getDate();
+  navDay.querySelector('.page-nav__day-number').textContent = seanceDayNumber;
   let dayWeek = weekdayDeterminator(day, index, array);
   navDay.querySelector('.page-nav__day-week').textContent = dayWeek;
   let month = +day.getMonth() + 1;
-  let seanceDate = day.getDate() + '.' + month + '.' + day.getFullYear();
+  let seanceDate = seanceDayNumber + '.' + month + '.' + day.getFullYear();
   navDay.setAttribute('data-seance-date', seanceDate);
+  navDay.setAttribute('data-seance-day-number', seanceDayNumber);
 });
 
 let argumentForSend = 'event=update';
 
-const xhr = new XMLHttpRequest();
-
-function fillingPageIndex() {
-  let response = xhr.response;
+function fillingPageIndex(response) {
   let films = response.films.result;
   let halls = response.halls.result;
   let seances = response.seances.result;
@@ -51,7 +50,7 @@ function fillingPageIndex() {
     movieInfo.querySelector('.movie__synopsis').textContent = filmDescription;
     let filmDuration = films[i]['film_duration'];
     movie.setAttribute('data-film-duration', filmDuration);
-    movieInfo.querySelector('.movie__data-duration').textContent = filmDuration + ' минут ';
+    movieInfo.querySelector('.movie__data-duration').textContent = filmDuration + ' мин ';
     let filmOrigin = films[i]['film_origin'];
     movie.setAttribute('data-film-origin', filmOrigin);
     movieInfo.querySelector('.movie__data-origin').textContent = filmOrigin;
@@ -63,9 +62,12 @@ function fillingPageIndex() {
     hallsOpen.forEach(hall => {
       let hallId = hall['hall_id'];
       let hallName = hall['hall_name']; 
+      let hallConfig = hall['hall_config'];
+      let priceStandart = hall['hall_price_standart'];
+      let priceVip = hall['hall_price_vip'];
       let seanceInHall = seances.find(seance => seance['seance_filmid'] === filmId && seance['seance_hallid'] === hallId);
       if (seanceInHall) {
-        filmHalls.push({hallId, hallName});
+        filmHalls.push({hallId, hallName, hallConfig, priceStandart, priceVip});
         movie.insertAdjacentHTML('beforeEnd', '<div class="movie-seances__hall"><h3 class="movie-seances__hall-title"></h3><ul class="movie-seances__list"></ul></div>');
       }
     });
@@ -73,11 +75,18 @@ function fillingPageIndex() {
     filmHalls.forEach((item, index) => {
       let filmSeances = seances.filter(seance => seance['seance_filmid'] === filmId && seance['seance_hallid'] === item['hallId']);
       let hallName = item['hallName'];
+      
       let hallNumber = hallName.substring(hallName.length - 1);
       movie.querySelectorAll('.movie-seances__hall-title')[index].textContent = 'Зал ' + hallNumber;
       movie.querySelectorAll('.movie-seances__hall')[index].setAttribute('data-hall-name', hallNumber);
       let itemHallId = item['hallId'];
       movie.querySelectorAll('.movie-seances__hall')[index].setAttribute('data-hall-id', itemHallId);
+      let itemHallConfig = item['hallConfig'];
+      movie.querySelectorAll('.movie-seances__hall')[index].setAttribute('data-hall-config', itemHallConfig);
+      let hallPriceStandart = item['priceStandart'];
+      movie.querySelectorAll('.movie-seances__hall')[index].setAttribute('data-hall-price-standart', hallPriceStandart);
+      let hallPriceVip  = item['priceVip'];
+      movie.querySelectorAll('.movie-seances__hall')[index].setAttribute('data-hall-price-vip', hallPriceVip);
       let seancesList = movie.querySelectorAll('.movie-seances__list')[index];
       filmSeances.forEach((seance, i) => {
         seancesList.insertAdjacentHTML('beforeEnd', '<li class="movie-seances__time-block"><a class="movie-seances__time" href="hall.html"></a></li>');
@@ -94,15 +103,21 @@ function fillingPageIndex() {
   }
   
   let activeNumberPage = 0;
-  
+
   navDays.forEach((navDay, index, array) => {
-    
     let allSeances = Array.from(document.querySelectorAll('.movie-seances__time'));
+
+    let dayNumber = navDay.dataset.seanceDayNumber;
+    let storedSeanceDate = navDay.dataset.seanceDate;
+    if (index === 0) {
+      localStorage.setItem('seanceDate', storedSeanceDate);
+      localStorage.setItem('dayNumber', dayNumber);
+    }
 
     navDay.addEventListener('click', (e) => {
       e.preventDefault();
 
-      let storedSeanceDate = navDay.dataset.seanceDate;
+      localStorage.setItem('dayNumber', dayNumber);
       localStorage.setItem('seanceDate', storedSeanceDate);
       array[activeNumberPage].classList.remove('page-nav__day_chosen');
       navDay.classList.add('page-nav__day_chosen');
@@ -115,8 +130,9 @@ function fillingPageIndex() {
 
         let storedSeanceId = seance.dataset.seanceId;
         localStorage.setItem('seanceId', storedSeanceId);
-        let initialStart = +seance.dataset.seanceStart;
-        let storedTimestamp = activeNumberPage * 86400 + initialStart * 60;
+        let initialStart = seance.dataset.seanceStart;  
+        let initialDayNumber = localStorage.getItem('dayNumber');
+        let storedTimestamp = initialDayNumber * 86400 + initialStart * 60;
         localStorage.setItem('seanceTimestamp', storedTimestamp);
         let storedSeanceTimeStart = seance.dataset.seanceTimeStart;
         localStorage.setItem('seanceTimeStart', storedSeanceTimeStart);
@@ -128,6 +144,12 @@ function fillingPageIndex() {
         localStorage.setItem('hallId', storedHallId);
         let storedHallName = hallOfSeance.dataset.hallName;
         localStorage.setItem('hallName', storedHallName);
+        let storedHallConfig = hallOfSeance.dataset.hallConfig;
+        localStorage.setItem('hallConfig', storedHallConfig);
+        let storedHallPriceStandart = hallOfSeance.dataset.hallPriceStandart;
+        localStorage.setItem('hallPriceStandart', storedHallPriceStandart);
+        let storedHallPriceVip = hallOfSeance.dataset.hallPriceVip;
+        localStorage.setItem('hallPriceVip', storedHallPriceVip);
         location.assign('hall.html');    
       });
     });  

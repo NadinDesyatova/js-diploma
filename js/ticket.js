@@ -15,6 +15,8 @@ seatsLocation.textContent = storedSeatsLocation;
 hallName.textContent = storedHallName;
 filmStart.textContent = storedSeanceStart;
 
-const ticketInfoQr = document.querySelector('ticket__info-qr');
-ticketInfoQr.innerHTML = '<div class="ticket__info-qr"></div>';
-document.querySelector('ticket__info-qr').append(QRCreator(ticketInformation).result);
+const ticketInfoQr = document.querySelector('.ticket__info-qr');
+ticketInfoQr.outerHTML = '<div class="ticket__info-qr"></div>';
+const qrcode = QRCreator(ticketInformation);
+const qrcodeContent = qrcode.result;
+ticketInfoQr.append(qrcodeContent);

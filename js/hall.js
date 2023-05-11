@@ -6,28 +6,39 @@ const argumentForSend = 'event=get_hallConfig&' + selectedTimestamp + '=${value1
 const selectedSeanceStart = localStorage.getItem('seanceTimeStart');
 const selectedFilmName = localStorage.getItem('filmName');
 const selectedHallName = localStorage.getItem('hallName');
+const selectedHallConfig = localStorage.getItem('hallConfig');
+const hallPriceStandart = localStorage.getItem('hallPriceStandart');
+const hallPriceVip = localStorage.getItem('hallPriceVip');
 
 const buyingInfoDescription = document.querySelector('.buying__info-description');
 const filmTitle = document.querySelector('.buying__info-title');
 const filmStart = document.querySelector('.buying__info-start');
 const hallName = document.querySelector('.buying__info-hall');
+const elementPriceStandart = document.querySelector('.price-standart');
+const elementPriceVip = document.querySelector('.price-vip');
+
 const acceptinButton = document.querySelector('.acceptin-button');
 const configHall = document.querySelector('.conf-step__wrapper');
+
 filmTitle.textContent = selectedFilmName;
 filmStart.textContent = 'Начало сеанса: ' + selectedSeanceStart;
 hallName.textContent = 'Зал ' + selectedHallName;
+elementPriceStandart.textContent = hallPriceStandart;
+elementPriceVip.textContent = hallPriceVip;
 
-const xhr = new XMLHttpRequest();
+function fillingPageHall(response) {
+  if (response === null) {
+    configHall.innerHTML = selectedHallConfig;
+  } else {
+    configHall.innerHTML = response;
+  }
 
-function fillingPageHall() {
-  let response = xhr.response;
-  configHall.innerHTML = response;
   let rows = configHall.querySelectorAll('.conf-step__row');
   for (let indexRow = 0; indexRow < rows.length; indexRow++) {
-    rows[indexRow].setAttribute('data-row', indexRow);
+    rows[indexRow].setAttribute('data-row', indexRow + 1);
     let seatsInRow = Array.from(rows[indexRow].querySelectorAll('.conf-step__chair')).filter(seat => seat.classList.contains('conf-step__chair_disabled') === false);
     for (let indexSeat = 0; indexSeat < seatsInRow.length; indexSeat++) {
-      seatsInRow[indexSeat].setAttribute('data-seat', indexSeat);
+      seatsInRow[indexSeat].setAttribute('data-seat', indexSeat + 1);
     }
   }
 
@@ -35,11 +46,11 @@ function fillingPageHall() {
   availableSeats.forEach(seat => {
     seat.addEventListener('click', () => {
       seat.classList.contains('conf-step__chair_vip') ? (
-        seat.setAttribute('data-seat-price', '350'),
+        seat.setAttribute('data-seat-price', hallPriceVip),
         seat.classList.remove('conf-step__chair_vip'),
         seat.classList.add('conf-step__chair_selected')
       ) : (
-        seat.setAttribute('data-seat-price', '250'),
+        seat.setAttribute('data-seat-price', hallPriceStandart),
         seat.classList.remove('conf-step__chair_standart'),
         seat.classList.add('conf-step__chair_selected')
       );
@@ -65,12 +76,16 @@ function fillingPageHall() {
         seatsLocation += ', ' + numberOfRow + '/' + numberOfSeat;
       }
       
-      localStorage.setItem('seatsLocation', seatsLocation);
-      localStorage.setItem('costOfTickets', accum);
       if (index === array.length - 1) {
+        localStorage.setItem('seatsLocation', seatsLocation);
+        localStorage.setItem('costOfTickets', accum);
         location.assign('payment.html');
       }
+
+      return accum;
     }, 0);
+
+    
   });
 }
 

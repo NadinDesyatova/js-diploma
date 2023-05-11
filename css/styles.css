@@ -424,6 +424,10 @@ body {
     display: block;
   }
 
+  .movie .movie__data {
+    margin-bottom: 2rem;
+  }
+
   .conf-step {
     padding: 1.5rem 1rem 1.5rem;
   }
