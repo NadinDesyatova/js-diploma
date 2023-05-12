@@ -14,5 +14,6 @@ function createRequest(argument, func) {
   xhr.send(argument);
 }
 
+let i = 0;
 
 
