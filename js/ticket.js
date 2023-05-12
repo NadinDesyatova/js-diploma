@@ -1,10 +1,9 @@
 const storedFilmName = localStorage.getItem('filmName');
 const storedSeanceDate = localStorage.getItem('seanceDate');
-const storedSeanceStart = localStorage.getItem('seanceStart');
+const storedSeanceStart = localStorage.getItem('seanceTimeStart');
 const storedHallName = localStorage.getItem('hallName');
 const storedSeatsLocation = localStorage.getItem('seatsLocation');
 const ticketInformation = 'Фильм: ' + storedFilmName + '; Дата сеанса: ' + storedSeanceDate + '; Начало сеанса: ' + storedSeanceStart + '; Зал: ' + storedHallName + '; Ряд/место: ' + storedSeatsLocation + '. Билет действителен строго на свой сеанс';
-
 const filmTitle = document.querySelector('.ticket__title');
 const seatsLocation = document.querySelector('.ticket__chairs');
 const hallName = document.querySelector('.ticket__hall');
