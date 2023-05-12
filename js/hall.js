@@ -33,43 +33,58 @@ function fillingPageHall(response) {
     configHall.innerHTML = response;
   }
 
+  let seatsInfo = [];
   let rows = configHall.querySelectorAll('.conf-step__row');
   for (let indexRow = 0; indexRow < rows.length; indexRow++) {
-    rows[indexRow].setAttribute('data-row', indexRow + 1);
-    let seatsInRow = Array.from(rows[indexRow].querySelectorAll('.conf-step__chair')).filter(seat => seat.classList.contains('conf-step__chair_disabled') === false);
-    for (let indexSeat = 0; indexSeat < seatsInRow.length; indexSeat++) {
-      seatsInRow[indexSeat].setAttribute('data-seat', indexSeat + 1);
-    }
-  }
+    let seatsInRow = Array.from(rows[indexRow].querySelectorAll('.conf-step__chair')).filter(seat => seat.classList.contains('conf-step__chair_disabled') === false);  
+    seatsInRow.forEach((seat, indexSeat) => {
+      if (seat.classList.contains('conf-step__chair_taken') === false) {
+        let seatPrice = 0;
+        seat.addEventListener('click', () => {
+          if (seat.classList.contains('conf-step__chair_vip')) {
+            seat.classList.remove('conf-step__chair_vip');
+            seat.classList.add('conf-step__chair_selected');
+            seatPrice = hallPriceVip;
+            seatsInfo.push({indexRow, indexSeat, seatPrice});           
+          } else if (seat.classList.contains('conf-step__chair_standart')){
+            seat.classList.remove('conf-step__chair_standart');
+            seat.classList.add('conf-step__chair_selected');
+            seatPrice = hallPriceStandart;
+            seatsInfo.push({indexRow, indexSeat, seatPrice});
+          } else if (seat.classList.contains('conf-step__chair_selected')) {
+            let indexForCancel = seatsInfo.findIndex(seatInfo => seatInfo.indexRow === indexRow && seatInfo.indexSeat === indexSeat);
+            seatsInfo[indexForCancel]['seatPrice'] === hallPriceVip ? (
+              seat.classList.remove('conf-step__chair_selected'),
+              seat.classList.add('conf-step__chair_vip')
+            ) : (
+              seat.classList.remove('conf-step__chair_selected'),
+              seat.classList.add('conf-step__chair_standart')
+            );
 
-  let availableSeats = Array.from(configHall.querySelectorAll('.conf-step__chair')).filter(seat => seat.classList.contains('conf-step__chair_disabled') === false && seat.classList.contains('conf-step__chair_taken') === false);
-  availableSeats.forEach(seat => {
-    seat.addEventListener('click', () => {
-      seat.classList.contains('conf-step__chair_vip') ? (
-        seat.setAttribute('data-seat-price', hallPriceVip),
-        seat.classList.remove('conf-step__chair_vip'),
-        seat.classList.add('conf-step__chair_selected')
-      ) : (
-        seat.setAttribute('data-seat-price', hallPriceStandart),
-        seat.classList.remove('conf-step__chair_standart'),
-        seat.classList.add('conf-step__chair_selected')
-      );
+            seatsInfo.splice(indexForCancel, 1);
+          }          
+        });
+      }
     });
-  });
+  }
 
   acceptinButton.addEventListener('click', (e) => {
     e.preventDefault();
+    
+    let selectedSeats = Array.from(configHall.querySelectorAll('.conf-step__chair')).filter(seat => seat.classList.contains('conf-step__chair_selected'));
+    selectedSeats.forEach(selectedSeat => {
+      selectedSeat.classList.remove('conf-step__chair_selected');
+      selectedSeat.classList.add('conf-step__chair_taken');
+    });
 
     let newConfigHall = configHall.innerHTML;
     localStorage.setItem('newConfigHall', newConfigHall);
 
-    let seatsLocation = '';
-    let selectedSeats = Array.from(configHall.querySelectorAll('.conf-step__chair')).filter(seat => seat.classList.contains('conf-step__chair_selected')); 
-    selectedSeats.reduce((accum, seat, index, array) => {
-      accum += +seat.dataset.seatPrice;
-      let rowOfSeat = seat.closest('.conf-step__row');
-      let numberOfRow = rowOfSeat.dataset.row;
-      let numberOfSeat = seat.dataset.seat;
+    let seatsLocation = '';   
+    seatsInfo.reduce((accum, seatInfo, index, array) => {
+      accum += +seatInfo.seatPrice;
+      let numberOfRow = seatInfo.indexRow + 1;
+      let numberOfSeat = seatInfo.indexSeat + 1;
       if (index === 0) {
         seatsLocation += numberOfRow + '/' + numberOfSeat;
       } else {
@@ -83,10 +98,9 @@ function fillingPageHall(response) {
       }
 
       return accum;
-    }, 0);
-
-    
+    }, 0);  
   });
 }
 
 createRequest(argumentForSend, fillingPageHall);
+

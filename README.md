@@ -4,17 +4,17 @@
 
 ## API сервиса:
 
-#### Базовый URL АПИ: *https://jscp-diplom.tw1.ru/*
+#### Базовый URL АПИ: *http://f0769682.xsph.ru/*
 
 #### Ответы API
 
-* Ответы API приходят в формате JSON. Перед отправкой запроса указывается свойство responseType = 'json', поэтому функция JSON.parse() не используется.
+* Ответы API приходят в формате JSON. Чтобы распарсить ответ используется функция JSON.parse().
 
 #### Запросы к API
 
 * При отправке запросов используются следующие параметры:
 
-1. Адрес (URL) - *https://jscp-diplom.tw1.ru/*
+1. Адрес (URL) - *http://f0769682.xsph.ru/*
 2. Метод (Method) - `POST`
 3. HTTP заголовок (HttpRequest). Название заголовка: `Content-Type`. Значение заголовка: `application/x-www-form-urlencoded`.
 

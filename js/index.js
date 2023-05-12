@@ -131,8 +131,8 @@ function fillingPageIndex(response) {
         let storedSeanceId = seance.dataset.seanceId;
         localStorage.setItem('seanceId', storedSeanceId);
         let initialStart = seance.dataset.seanceStart;  
-        let initialDayNumber = localStorage.getItem('dayNumber');
-        let storedTimestamp = initialDayNumber * 86400 + initialStart * 60;
+        let currentDayNumber = localStorage.getItem('dayNumber');
+        let storedTimestamp = currentDayNumber * 86400 + initialStart * 60;
         localStorage.setItem('seanceTimestamp', storedTimestamp);
         let storedSeanceTimeStart = seance.dataset.seanceTimeStart;
         localStorage.setItem('seanceTimeStart', storedSeanceTimeStart);
