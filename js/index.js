@@ -13,15 +13,20 @@ function weekdayDeterminator(date, index, days) {
 
 navDays.forEach((navDay, index, array) => {
   let day = new Date();
-  day.setDate(day.getDate() + index); 
+  day.setDate(day.getDate() + index);
+  day.setHours(0, 0, 0, 0);
+  let currentDayTimestamp = Math.floor(day.getTime() / 1000);
   let seanceDayNumber = day.getDate();
   navDay.querySelector('.page-nav__day-number').textContent = seanceDayNumber;
   let dayWeek = weekdayDeterminator(day, index, array);
   navDay.querySelector('.page-nav__day-week').textContent = dayWeek;
   let month = +day.getMonth() + 1;
-  let seanceDate = seanceDayNumber + '.' + month + '.' + day.getFullYear();
+  correctMonth = (month < 10) ? '0' + month : month;
+  correctDay = (seanceDayNumber < 10) ? '0' + seanceDayNumber : seanceDayNumber;
+  let seanceDate = correctDay + '.' + correctMonth + '.' + day.getFullYear();
   navDay.setAttribute('data-seance-date', seanceDate);
   navDay.setAttribute('data-seance-day-number', seanceDayNumber);
+  navDay.setAttribute('data-day-timestamp', currentDayTimestamp);
 });
 
 let argumentForSend = 'event=update';
@@ -74,8 +79,7 @@ function fillingPageIndex(response) {
 
     filmHalls.forEach((item, index) => {
       let filmSeances = seances.filter(seance => seance['seance_filmid'] === filmId && seance['seance_hallid'] === item['hallId']);
-      let hallName = item['hallName'];
-      
+      let hallName = item['hallName'];      
       let hallNumber = hallName.substring(hallName.length - 1);
       movie.querySelectorAll('.movie-seances__hall-title')[index].textContent = 'Зал ' + hallNumber;
       movie.querySelectorAll('.movie-seances__hall')[index].setAttribute('data-hall-name', hallNumber);
@@ -97,33 +101,76 @@ function fillingPageIndex(response) {
         seanceTime.textContent = seanceTimeStart;
         seanceTime.setAttribute('data-seance-time-start', seanceTimeStart);
         let seanceId = seance['seance_id'];
-        seanceTime.setAttribute('data-seance-id', seanceId);
+        seanceTime.setAttribute('data-seance-id', seanceId); 
       });  
-    });
+    }); 
   }
-  
+
+  const movies = Array.from(mainBlock.querySelectorAll('.movie'));
+  const mainBlockContent = mainBlock.innerHTML;
+  localStorage.setItem('mainBlockContent', mainBlockContent);
+
   let activeNumberPage = 0;
 
-  navDays.forEach((navDay, index, array) => {
-    let allSeances = Array.from(document.querySelectorAll('.movie-seances__time'));
-
+  navDays.forEach((navDay, index, array) => {    
     let dayNumber = navDay.dataset.seanceDayNumber;
     let storedSeanceDate = navDay.dataset.seanceDate;
-    if (index === 0) {
+    let storedDayTimestamp = navDay.dataset.dayTimestamp;
+    
+    function fillingPageIndexToday() {
       localStorage.setItem('seanceDate', storedSeanceDate);
       localStorage.setItem('dayNumber', dayNumber);
+      localStorage.setItem('activeNumberPage', activeNumberPage);
+      localStorage.setItem('dayTimestamp', storedDayTimestamp);
+
+      movies.forEach(movie => {
+        let hallsOfFilm = Array.from(movie.querySelectorAll('.movie-seances__hall'));
+        hallsOfFilm.forEach(hall => {
+          let timesOfSeances = Array.from(hall.querySelectorAll('.movie-seances__time'));
+          timesOfSeances.forEach(time => {
+            let seanceStart = time.dataset.seanceStart;
+            let todayTimestamp = navDay.dataset.dayTimestamp;
+            let seanceTimeStamp = +todayTimestamp + seanceStart * 60;
+            let nowTimestamp = Math.floor(Date.now() / 1000); 
+            if (seanceTimeStamp < nowTimestamp) { 
+              let timeBlockToday = time.closest('.movie-seances__time-block');
+              timeBlockToday.remove();         
+            }
+          }); 
+        });
+
+        hallsOfFilm.forEach(hall => {
+          let currentTimesOfSeances = Array.from(hall.querySelectorAll('.movie-seances__time'));
+          if (currentTimesOfSeances.length === 0) {
+            hall.remove();
+          }  
+        });
+      }); 
     }
+      if (index === 0) {
+      fillingPageIndexToday();
+    }
+
+    
 
     navDay.addEventListener('click', (e) => {
       e.preventDefault();
-
+  
+      if (index === 0) {
+      fillingPageIndexToday();
+    } else {
+      mainBlock.innerHTML = localStorage.getItem('mainBlockContent');
+    }
       localStorage.setItem('dayNumber', dayNumber);
       localStorage.setItem('seanceDate', storedSeanceDate);
       array[activeNumberPage].classList.remove('page-nav__day_chosen');
       navDay.classList.add('page-nav__day_chosen');
-      activeNumberPage = index;     
+      activeNumberPage = index;
+      localStorage.setItem('activeNumberPage', activeNumberPage);
+      localStorage.setItem('dayTimestamp', storedDayTimestamp);  
     });
-
+    
+    let allSeances = Array.from(document.querySelectorAll('.movie-seances__time'));
     allSeances.forEach(seance => {
       seance.addEventListener('click', (e) => {
         e.preventDefault();
@@ -131,9 +178,10 @@ function fillingPageIndex(response) {
         let storedSeanceId = seance.dataset.seanceId;
         localStorage.setItem('seanceId', storedSeanceId);
         let initialStart = seance.dataset.seanceStart;  
-        let currentDayNumber = localStorage.getItem('dayNumber');
-        let storedTimestamp = currentDayNumber * 86400 + initialStart * 60;
-        localStorage.setItem('seanceTimestamp', storedTimestamp);
+        let activePage = localStorage.getItem('activeNumberPage');
+        let dayTimestamp = localStorage.getItem('dayTimestamp');
+        let currentTimestamp = +dayTimestamp + initialStart * 60;
+        localStorage.setItem('seanceTimestamp', currentTimestamp);
         let storedSeanceTimeStart = seance.dataset.seanceTimeStart;
         localStorage.setItem('seanceTimeStart', storedSeanceTimeStart);
         let filmOfSeance = seance.closest('.movie');
