@@ -7,7 +7,7 @@ function createRequest(argument, func) {
     func(response);
   });
 
-  xhr.open('POST', 'https://jscp-diplom.tw1.ru/', true);
+  xhr.open('POST', 'https://jscp-diplom.netoserver.ru/', true);
 
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 

@@ -46,7 +46,7 @@ function fillingPageHall(response) {
             seat.classList.add('conf-step__chair_selected');
             seatPrice = hallPriceVip;
             seatsInfo.push({indexRow, indexSeat, seatPrice});           
-          } else if (seat.classList.contains('conf-step__chair_standart')){
+          } else if (seat.classList.contains('conf-step__chair_standart')) {
             seat.classList.remove('conf-step__chair_standart');
             seat.classList.add('conf-step__chair_selected');
             seatPrice = hallPriceStandart;
@@ -80,7 +80,19 @@ function fillingPageHall(response) {
     let newConfigHall = configHall.innerHTML;
     localStorage.setItem('newConfigHall', newConfigHall);
 
-    let seatsLocation = '';   
+    let seatsLocation = ''; 
+    seatsInfo.sort((a, b) => {
+      let aRowSeat = JSON.stringify(a.indexRow) + JSON.stringify(a.indexSeat);
+      let bRowSeat = JSON.stringify(b.indexRow) + JSON.stringify(b.indexSeat);
+      if (+aRowSeat > +bRowSeat) {
+        return 1;
+      }
+      
+      if (+aRowSeat < +bRowSeat) {
+        return -1;
+      }
+    });
+
     seatsInfo.reduce((accum, seatInfo, index, array) => {
       accum += +seatInfo.seatPrice;
       let numberOfRow = seatInfo.indexRow + 1;

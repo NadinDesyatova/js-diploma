@@ -106,7 +106,6 @@ function fillingPageIndex(response) {
     }); 
   }
 
-  const movies = Array.from(mainBlock.querySelectorAll('.movie'));
   const mainBlockContent = mainBlock.innerHTML;
   localStorage.setItem('mainBlockContent', mainBlockContent);
 
@@ -116,14 +115,14 @@ function fillingPageIndex(response) {
     let dayNumber = navDay.dataset.seanceDayNumber;
     let storedSeanceDate = navDay.dataset.seanceDate;
     let storedDayTimestamp = navDay.dataset.dayTimestamp;
-    
+
     function fillingPageIndexToday() {
       localStorage.setItem('seanceDate', storedSeanceDate);
       localStorage.setItem('dayNumber', dayNumber);
       localStorage.setItem('activeNumberPage', activeNumberPage);
       localStorage.setItem('dayTimestamp', storedDayTimestamp);
 
-      movies.forEach(movie => {
+      Array.from(mainBlock.querySelectorAll('.movie')).forEach(movie => {
         let hallsOfFilm = Array.from(movie.querySelectorAll('.movie-seances__hall'));
         hallsOfFilm.forEach(hall => {
           let timesOfSeances = Array.from(hall.querySelectorAll('.movie-seances__time'));
@@ -147,17 +146,51 @@ function fillingPageIndex(response) {
         });
       }); 
     }
-      if (index === 0) {
-      fillingPageIndexToday();
+
+    function seanceInformationProcessing() {
+      Array.from(document.querySelectorAll('.movie-seances__time')).forEach(seance => {
+        seance.addEventListener('click', (e) => {
+          e.preventDefault();
+
+          let storedSeanceId = seance.dataset.seanceId;
+          localStorage.setItem('seanceId', storedSeanceId);
+          let initialStart = seance.dataset.seanceStart;  
+          let activePage = localStorage.getItem('activeNumberPage');
+          let dayTimestamp = localStorage.getItem('dayTimestamp'); 
+          let currentTimestamp = +dayTimestamp + initialStart * 60;
+          localStorage.setItem('seanceTimestamp', currentTimestamp);
+          let storedSeanceTimeStart = seance.dataset.seanceTimeStart;
+          localStorage.setItem('seanceTimeStart', storedSeanceTimeStart);
+          let filmOfSeance = seance.closest('.movie');
+          let storedfilmName = filmOfSeance.dataset.filmName;
+          localStorage.setItem('filmName', storedfilmName);
+          let hallOfSeance = seance.closest('.movie-seances__hall');
+          let storedHallId = hallOfSeance.dataset.hallId;
+          localStorage.setItem('hallId', storedHallId);
+          let storedHallName = hallOfSeance.dataset.hallName;
+          localStorage.setItem('hallName', storedHallName);
+          let storedHallConfig = hallOfSeance.dataset.hallConfig;
+          localStorage.setItem('hallConfig', storedHallConfig);
+          let storedHallPriceStandart = hallOfSeance.dataset.hallPriceStandart;
+          localStorage.setItem('hallPriceStandart', storedHallPriceStandart);
+          let storedHallPriceVip = hallOfSeance.dataset.hallPriceVip;
+          localStorage.setItem('hallPriceVip', storedHallPriceVip);
+          location.assign('hall.html');   
+        });
+      });  
     }
 
+    if (index === 0) {
+      fillingPageIndexToday();
+    }
     
+    seanceInformationProcessing(); 
 
     navDay.addEventListener('click', (e) => {
       e.preventDefault();
-  
+
       if (index === 0) {
-      fillingPageIndexToday();
+        fillingPageIndexToday();
     } else {
       mainBlock.innerHTML = localStorage.getItem('mainBlockContent');
     }
@@ -167,40 +200,10 @@ function fillingPageIndex(response) {
       navDay.classList.add('page-nav__day_chosen');
       activeNumberPage = index;
       localStorage.setItem('activeNumberPage', activeNumberPage);
-      localStorage.setItem('dayTimestamp', storedDayTimestamp);  
-    });
-    
-    let allSeances = Array.from(document.querySelectorAll('.movie-seances__time'));
-    allSeances.forEach(seance => {
-      seance.addEventListener('click', (e) => {
-        e.preventDefault();
+      localStorage.setItem('dayTimestamp', storedDayTimestamp);
 
-        let storedSeanceId = seance.dataset.seanceId;
-        localStorage.setItem('seanceId', storedSeanceId);
-        let initialStart = seance.dataset.seanceStart;  
-        let activePage = localStorage.getItem('activeNumberPage');
-        let dayTimestamp = localStorage.getItem('dayTimestamp');
-        let currentTimestamp = +dayTimestamp + initialStart * 60;
-        localStorage.setItem('seanceTimestamp', currentTimestamp);
-        let storedSeanceTimeStart = seance.dataset.seanceTimeStart;
-        localStorage.setItem('seanceTimeStart', storedSeanceTimeStart);
-        let filmOfSeance = seance.closest('.movie');
-        let storedfilmName = filmOfSeance.dataset.filmName;
-        localStorage.setItem('filmName', storedfilmName);
-        let hallOfSeance = seance.closest('.movie-seances__hall');
-        let storedHallId = hallOfSeance.dataset.hallId;
-        localStorage.setItem('hallId', storedHallId);
-        let storedHallName = hallOfSeance.dataset.hallName;
-        localStorage.setItem('hallName', storedHallName);
-        let storedHallConfig = hallOfSeance.dataset.hallConfig;
-        localStorage.setItem('hallConfig', storedHallConfig);
-        let storedHallPriceStandart = hallOfSeance.dataset.hallPriceStandart;
-        localStorage.setItem('hallPriceStandart', storedHallPriceStandart);
-        let storedHallPriceVip = hallOfSeance.dataset.hallPriceVip;
-        localStorage.setItem('hallPriceVip', storedHallPriceVip);
-        location.assign('hall.html');    
-      });
-    });  
+      seanceInformationProcessing(); 
+    });
   }); 
 }
 
