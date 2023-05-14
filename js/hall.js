@@ -106,6 +106,7 @@ function fillingPageHall(response) {
       if (index === array.length - 1) {
         localStorage.setItem('seatsLocation', seatsLocation);
         localStorage.setItem('costOfTickets', accum);
+        
         location.assign('payment.html');
       }
 

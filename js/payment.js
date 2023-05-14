@@ -18,7 +18,6 @@ filmStart.textContent = storedSeanceStart;
 ticketCost.textContent = storedCostOfTickets;
 
 const storedTimestamp = localStorage.getItem('seanceTimestamp');
-console.log(storedTimestamp);
 const storedHallId = localStorage.getItem('hallId');
 const storedSeanceId = localStorage.getItem('seanceId');
 const storedConfigHall = localStorage.getItem('newConfigHall');
