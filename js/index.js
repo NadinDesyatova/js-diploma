@@ -12,10 +12,12 @@ function weekdayDeterminator(date, index, days) {
 }
 
 navDays.forEach((navDay, index, array) => {
+  let today = new Date();
+  today.setHours(0, 0, 0, 0);
+  let todayTimestamp = Math.round(+today / 1000);
+  let currentDayTimestamp = todayTimestamp + 86400 * index;
   let day = new Date();
   day.setDate(day.getDate() + index);
-  day.setHours(0, 0, 0, 0);
-  let currentDayTimestamp = Math.floor(+day / 1000);
   let seanceDayNumber = day.getDate();
   navDay.querySelector('.page-nav__day-number').textContent = seanceDayNumber;
   let dayWeek = weekdayDeterminator(day, index, array);
@@ -112,11 +114,10 @@ function fillingPageIndex(response) {
 
   navDays.forEach((navDay, index, array) => {    
     let storedSeanceDate = navDay.dataset.seanceDate;
-    let storedDayTimestamp = navDay.dataset.dayTimestamp;
+    let dayTimestamp = navDay.dataset.dayTimestamp;
 
     function fillingPageIndexToday() {
       localStorage.setItem('seanceDate', storedSeanceDate);
-      localStorage.setItem('dayTimestamp', storedDayTimestamp);
 
       Array.from(mainBlock.querySelectorAll('.movie')).forEach(movie => {
         let hallsOfFilm = Array.from(movie.querySelectorAll('.movie-seances__hall'));
@@ -124,9 +125,8 @@ function fillingPageIndex(response) {
           let timesOfSeances = Array.from(hall.querySelectorAll('.movie-seances__time'));
           timesOfSeances.forEach(time => {
             let seanceStart = time.dataset.seanceStart;
-            let todayTimestamp = navDay.dataset.dayTimestamp;
-            let seanceTimeStamp = +todayTimestamp + seanceStart * 60;
-            let nowTimestamp = Math.floor(Date.now() / 1000); 
+            let seanceTimeStamp = +dayTimestamp + seanceStart * 60;
+            let nowTimestamp = Math.round(Date.now() / 1000); 
             if (seanceTimeStamp < nowTimestamp) { 
               let timeBlockToday = time.closest('.movie-seances__time-block');
               timeBlockToday.remove();         
@@ -151,7 +151,7 @@ function fillingPageIndex(response) {
           let storedSeanceId = seance.dataset.seanceId;
           localStorage.setItem('seanceId', storedSeanceId);
           let initialStart = seance.dataset.seanceStart; 
-          let dayTimestamp = localStorage.getItem('dayTimestamp');
+          let dayTimestamp = navDay.dataset.dayTimestamp;
           let currentTimestamp = +dayTimestamp + initialStart * 60;
           localStorage.setItem('seanceTimestamp', currentTimestamp);
           let storedSeanceTimeStart = seance.dataset.seanceTimeStart;
@@ -170,7 +170,7 @@ function fillingPageIndex(response) {
           localStorage.setItem('hallPriceStandart', storedHallPriceStandart);
           let storedHallPriceVip = hallOfSeance.dataset.hallPriceVip;
           localStorage.setItem('hallPriceVip', storedHallPriceVip);
-          
+
           location.assign('hall.html');   
         });
       });  
@@ -195,7 +195,6 @@ function fillingPageIndex(response) {
       array[activeNumberPage].classList.remove('page-nav__day_chosen');
       navDay.classList.add('page-nav__day_chosen');
       activeNumberPage = index;
-      localStorage.setItem('dayTimestamp', storedDayTimestamp);
 
       seanceInformationProcessing(); 
     });
