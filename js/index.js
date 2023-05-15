@@ -14,8 +14,8 @@ function weekdayDeterminator(date, index, days) {
 navDays.forEach((navDay, index, array) => {
   let today = new Date();
   today.setHours(0, 0, 0, 0);
-  let todayTimestamp = (+today / 1000).toFixed(0);
-  let currentDayTimestamp = +todayTimestamp + 86400 * index;
+  let todayTimestamp = Math.trunc(+today / 1000);
+  let currentDayTimestamp = todayTimestamp + 86400 * index;
   let day = new Date();
   day.setDate(day.getDate() + index);
   let seanceDayNumber = day.getDate();
@@ -126,7 +126,7 @@ function fillingPageIndex(response) {
           timesOfSeances.forEach(time => {
             let seanceStart = time.dataset.seanceStart;
             let seanceTimeStamp = +dayTimestamp + seanceStart * 60;
-            let nowTimestamp = +(Date.now() / 1000).toFixed(0); 
+            let nowTimestamp = Math.trunc(Date.now() / 1000); 
             if (seanceTimeStamp < nowTimestamp) { 
               let timeBlockToday = time.closest('.movie-seances__time-block');
               timeBlockToday.remove();         
