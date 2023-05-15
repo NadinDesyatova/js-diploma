@@ -1,7 +1,7 @@
-const selectedTimestamp = localStorage.getItem('seanceTimestamp');
-const selectedHallId = localStorage.getItem('hallId');
-const selectedSeanceId = localStorage.getItem('seanceId');
-const argumentForSend = 'event=get_hallConfig&' + selectedTimestamp + '=${value1}&'+ selectedHallId + '=${value2}&'+ selectedSeanceId + '=${value3}';
+let selectedTimestamp = localStorage.getItem('seanceTimestamp');
+let selectedHallId = localStorage.getItem('hallId');
+let selectedSeanceId = localStorage.getItem('seanceId');
+let argumentForHall = 'event=get_hallConfig&' + selectedTimestamp + '=${value1}&'+ selectedHallId + '=${value2}&'+ selectedSeanceId + '=${value3}';
 
 const selectedSeanceStart = localStorage.getItem('seanceTimeStart');
 const selectedFilmName = localStorage.getItem('filmName');
@@ -115,5 +115,5 @@ function fillingPageHall(response) {
   });
 }
 
-createRequest(argumentForSend, fillingPageHall);
+createRequest(argumentForHall, fillingPageHall);
 
