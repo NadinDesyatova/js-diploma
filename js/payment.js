@@ -22,7 +22,7 @@ const storedHallId = localStorage.getItem('hallId');
 const storedSeanceId = localStorage.getItem('seanceId');
 const storedConfigHall = localStorage.getItem('newConfigHall');
 
-let argumentForPayment = 'event=sale_add&' + storedTimestamp + '=${value1}&'+ storedHallId + '=${value2}&'+ storedSeanceId + '=${value3}&'+ storedConfigHall + '=${value4}';
+let argumentForPayment = `event=sale_add&timestamp=${storedTimestamp}&hallId=${storedHallId}&seanceId=${storedSeanceId}&hallConfiguration=${storedConfigHall}`;
 
 function goToPageTicket(response) {
   location.assign('ticket.html');

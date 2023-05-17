@@ -12,12 +12,10 @@ function weekdayDeterminator(date, index, days) {
 }
 
 navDays.forEach((navDay, index, array) => {
-  let today = new Date();
-  today.setHours(0, 0, 0, 0);
-  let todayTimestamp = Math.trunc(+today / 1000);
-  let currentDayTimestamp = todayTimestamp + 86400 * index;
   let day = new Date();
   day.setDate(day.getDate() + index);
+  day.setHours(0, 0, 0, 0);
+  let currentDayTimestamp = Math.trunc(+day / 1000);
   let seanceDayNumber = day.getDate();
   navDay.querySelector('.page-nav__day-number').textContent = seanceDayNumber;
   let dayWeek = weekdayDeterminator(day, index, array);
@@ -52,13 +50,10 @@ function fillingPageIndex(response) {
     movie.setAttribute('data-film-name', filmName);
     movieInfo.querySelector('.movie__title').textContent = filmName;
     let filmDescription = films[i]['film_description'];
-    movie.setAttribute('data-film-description', filmDescription);
     movieInfo.querySelector('.movie__synopsis').textContent = filmDescription;
     let filmDuration = films[i]['film_duration'];
-    movie.setAttribute('data-film-duration', filmDuration);
     movieInfo.querySelector('.movie__data-duration').textContent = filmDuration + ' мин ';
     let filmOrigin = films[i]['film_origin'];
-    movie.setAttribute('data-film-origin', filmOrigin);
     movieInfo.querySelector('.movie__data-origin').textContent = filmOrigin;
     let filmId = films[i]['film_id'];
     movie.setAttribute('data-film-id', filmId);
@@ -113,19 +108,16 @@ function fillingPageIndex(response) {
   let activeNumberPage = 0;
 
   navDays.forEach((navDay, index, array) => {    
-    let storedSeanceDate = navDay.dataset.seanceDate;
-    let dayTimestamp = navDay.dataset.dayTimestamp;
-
+    
     function fillingPageIndexToday() {
-      localStorage.setItem('seanceDate', storedSeanceDate);
-
       Array.from(mainBlock.querySelectorAll('.movie')).forEach(movie => {
         let hallsOfFilm = Array.from(movie.querySelectorAll('.movie-seances__hall'));
-        hallsOfFilm.forEach(hall => {
+        hallsOfFilm.forEach((hall, index, array) => {
           let timesOfSeances = Array.from(hall.querySelectorAll('.movie-seances__time'));
           timesOfSeances.forEach(time => {
             let seanceStart = time.dataset.seanceStart;
-            let seanceTimeStamp = +dayTimestamp + seanceStart * 60;
+            let todayTimestamp = navDay.dataset.dayTimestamp;
+            let seanceTimeStamp = +todayTimestamp + seanceStart * 60;
             let nowTimestamp = Math.trunc(Date.now() / 1000); 
             if (seanceTimeStamp < nowTimestamp) { 
               let timeBlockToday = time.closest('.movie-seances__time-block');
@@ -152,7 +144,7 @@ function fillingPageIndex(response) {
           localStorage.setItem('seanceId', storedSeanceId);
           let initialStart = seance.dataset.seanceStart; 
           let dayTimestamp = navDay.dataset.dayTimestamp;
-          let currentTimestamp = +dayTimestamp + initialStart * 60;
+          let currentTimestamp = +dayTimestamp + initialStart * 60;    
           localStorage.setItem('seanceTimestamp', currentTimestamp);
           let storedSeanceTimeStart = seance.dataset.seanceTimeStart;
           localStorage.setItem('seanceTimeStart', storedSeanceTimeStart);
@@ -170,6 +162,8 @@ function fillingPageIndex(response) {
           localStorage.setItem('hallPriceStandart', storedHallPriceStandart);
           let storedHallPriceVip = hallOfSeance.dataset.hallPriceVip;
           localStorage.setItem('hallPriceVip', storedHallPriceVip);
+          let storedSeanceDate = navDay.dataset.seanceDate;
+          localStorage.setItem('seanceDate', storedSeanceDate);
 
           location.assign('hall.html');   
         });
@@ -178,9 +172,9 @@ function fillingPageIndex(response) {
 
     if (index === 0) {
       fillingPageIndexToday();
-    }
-    
-    seanceInformationProcessing(); 
+
+      seanceInformationProcessing();
+    } 
 
     navDay.addEventListener('click', (e) => {
       e.preventDefault();
@@ -191,7 +185,6 @@ function fillingPageIndex(response) {
       mainBlock.innerHTML = localStorage.getItem('mainBlockContent');
     }
 
-      localStorage.setItem('seanceDate', storedSeanceDate);
       array[activeNumberPage].classList.remove('page-nav__day_chosen');
       navDay.classList.add('page-nav__day_chosen');
       activeNumberPage = index;

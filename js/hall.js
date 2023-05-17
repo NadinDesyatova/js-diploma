@@ -1,7 +1,7 @@
 let selectedTimestamp = localStorage.getItem('seanceTimestamp');
 let selectedHallId = localStorage.getItem('hallId');
 let selectedSeanceId = localStorage.getItem('seanceId');
-let argumentForHall = 'event=get_hallConfig&' + selectedTimestamp + '=${value1}&'+ selectedHallId + '=${value2}&'+ selectedSeanceId + '=${value3}';
+let argumentForHall = `event=get_hallConfig&timestamp=${selectedTimestamp}&hallId=${selectedHallId}&seanceId=${selectedSeanceId}`;
 
 const selectedSeanceStart = localStorage.getItem('seanceTimeStart');
 const selectedFilmName = localStorage.getItem('filmName');
