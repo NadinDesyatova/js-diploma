@@ -21,8 +21,8 @@ navDays.forEach((navDay, index, array) => {
   let dayWeek = weekdayDeterminator(day, index, array);
   navDay.querySelector('.page-nav__day-week').textContent = dayWeek;
   let month = +day.getMonth() + 1;
-  correctMonth = (month < 10) ? '0' + month : month;
-  correctDay = (seanceDayNumber < 10) ? '0' + seanceDayNumber : seanceDayNumber;
+  let correctMonth = (month < 10) ? '0' + month : month;
+  let correctDay = (seanceDayNumber < 10) ? '0' + seanceDayNumber : seanceDayNumber;
   let seanceDate = correctDay + '.' + correctMonth + '.' + day.getFullYear();
   navDay.setAttribute('data-seance-date', seanceDate);
   navDay.setAttribute('data-day-timestamp', currentDayTimestamp);
